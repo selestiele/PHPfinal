@@ -340,8 +340,6 @@ header {
   border-top: 1px solid #5C71A1; }
 
 form {
-  width: 90%;
-  margin: 0 auto;
   border: 1px solid #1A243B;
   text-align: justify;
   background-color: #5C71A1;
@@ -360,11 +358,6 @@ form {
 option {
   padding: .5em; }
 
-#apr:after {
-  display: inline;
-  font-family: "Muli", Tahoma, sans-serif;
-  content: "%"; }
-
 .submitBtn {
   padding: .5em;
   margin: 1em;
@@ -372,8 +365,7 @@ option {
   background-color: #1A243B;
   color: #f2f6ff;
   border: 0;
-  box-shadow: none;
-  max-width: 50%; }
+  box-shadow: none; }
   .submitBtn:hover {
     background-color: #584521; }
 
@@ -384,7 +376,7 @@ option {
 
 .results {
   width: 90%;
-  margin: 1.5em auto; }
+  margin: 0 auto; }
 
 .calc {
   text-align: center; }
@@ -426,24 +418,30 @@ footer {
 /* Larger screens */
 @supports (display: grid) {
   @media screen and (min-width: 780px) {
-    .results {
+    .topSections {
       display: grid;
-      grid-template-areas: "entered calc" " . savings"; }
+      grid-template-areas: "instructions enteredHead" "form entered" "savings calc"; }
+
+    .instructions {
+      grid-area: instructions; }
+
+    .enteredHead {
+      grid-area: enteredHead; }
+
+    .formInput {
+      grid-area: form;
+      margin-right: 1em; }
 
     .entered {
-      display: grid;
       grid-area: entered;
-      padding: 1em;
-      margin-right: .5em; }
+      margin-top: 2em; }
 
     .calc {
-      display: grid;
       grid-area: calc;
       padding: 1em;
       margin-left: .5em; }
 
     .savings {
-      display: grid;
       grid-area: savings;
       padding: 1em;
       margin-left: .5em; } } }

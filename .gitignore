@@ -1,3 +1,4 @@
 *.log
 style.css.map
 nbproject/
+.sass-cache/

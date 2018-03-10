@@ -41,8 +41,6 @@ header {
 }
 
 form {
-    width: 90%;
-    margin: 0 auto;
     border: 1px solid $darkblue;
     text-align: justify;
     background-color: $medblue;
@@ -66,12 +64,6 @@ option {
 }
 
 
-#apr:after {
-    display: inline;
-    font-family: $sans;
-    content: "%";
-}
-
 .submitBtn {
     padding: .5em;
     margin: 1em;
@@ -80,7 +72,6 @@ option {
     color: $background;
     border: 0;
     box-shadow: none;
-    max-width: 50%;
     
     &:hover {
         background-color: $darkgold;
@@ -95,7 +86,7 @@ option {
 
 .results {
     width: 90%;
-    margin: 1.5em auto;
+    margin: 0 auto;
 }
 
 .calc {
@@ -139,9 +130,6 @@ table {
         
     }
     
-    td {
-        
-    }
 }
 
 footer {
@@ -152,42 +140,43 @@ footer {
 
 
 
-
-
-
-
-
-
-
-
 /* Larger screens */  
         
 @supports (display: grid) {
 
     @media screen and (min-width: 780px) {
-        .results {
+        .topSections {
             display: grid;
-            grid-template-areas: 
-                "entered calc"
-                " . savings";
+            grid-template-areas:    "instructions enteredHead"
+                                    "form entered"
+                                    "savings calc";
         }
-        
+
+        .instructions {
+            grid-area: instructions;
+        }
+
+        .enteredHead {
+            grid-area: enteredHead;
+        }
+
+        .formInput {
+            grid-area: form;
+            margin-right: 1em;
+        }
+
         .entered {
-            display: grid;
             grid-area: entered;
-            padding: 1em;
-            margin-right: .5em;
+            margin-top: 2em;
         }
         
         .calc {
-            display: grid;
             grid-area: calc;
             padding: 1em;
             margin-left: .5em;
         }
         
         .savings {
-            display: grid;
             grid-area: savings;
             padding: 1em;
             margin-left: .5em;

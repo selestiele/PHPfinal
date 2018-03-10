@@ -4,9 +4,10 @@
     <main>
         <article class="topSections">
             <section class="form">
+                <div class="instructions">
                 <p>Please enter your information in the form. Fields marked with an asterisk (*) are required.</p>
-                <p class="errorMsg"><!-- Add validation error messages here --></p>
-                <form action="#" method="post">
+                <p class="errorMsg"><!-- Add validation error messages here --></p></div>
+                <form action="controller.php" method="post" class="formInput">
                     <label for="length" class="formLabel">Loan Length*<br>
                         <select name="length" id="length">
                             <option value="12">12 months</option>
@@ -21,7 +22,7 @@
                         <input type="text" name="amount" id="amount" class="formInput"></label>
                     
                     <label for="apr" class="formLabel">Annual Interest Rate*<br>
-                        <input type="text" name="apr" id="apr" class="formInput" maxlength="5"></label>
+                        <input type="text" name="apr" id="apr" class="formInput" maxlength="5"> &percnt; </label>
                     <label for="extra" class="formLabel">Extra Payment<br>
                         <input type="text" name="extra" id="extra" class="formInput"></label><br>
                     <input type="submit" value="Calculate!" class="submitBtn">
@@ -29,13 +30,12 @@
             </section>
 <!-- Display the calculations-->
             <section class="results">
+                <h3 class="enteredHead">You Entered:</h3>
                 <div class="entered">
-                    
-                        <p>Here is the information you entered:</p>
-                        <p>Loan Amount: Testing<!-- Amount entered on form or error message --></p> 
-                        <p>Loan Length: Testing<!-- Amount entered on form or error message --></p>
-                        <p>Annual Interest Rate: Testing<!-- Amount entered on form or error message --></p>
-                        <p>Extra Payments (optional): Testing<!-- Amount entered on form or error message --></p>
+                        <p>Loan Amount: <!-- <?php echo htmlspecialchars($amount);  ?>--></p> 
+                        <p>Loan Length: <!--<?php echo htmlspecialchars($length);  ?>--></p>
+                        <p>Annual Interest Rate: <!--<?php echo htmlspecialchars($apr);  ?>--> &percnt;</p>
+                        <p>Extra Payments (optional):<!-- <?php echo htmlspecialchars($extra);  ?>--></p>
                 </div> <!-- end .entered -->
                 <div class="calc">
                     <h3>Monthly Payment Amount</h3>
@@ -46,9 +46,7 @@
                         <p>Testing<!-- Calculated total amount of interest to be paid --></p>
                 </div><!-- end .calc -->
                 <div class="savings">
-                    <h3>Savings</h3>
-                        <p>By making extra payments each month, you will cut your loan duration down to: <!-- Calculated time saved--></p>
-                        <p>By making extra payments each month, you will save: <!-- Calculated amount saved --></p>
+                    <p>so there's something here</p>
                 </div><!-- end .savings -->
             </section> <!-- end .results -->
         </article>
