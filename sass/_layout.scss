@@ -73,6 +73,12 @@ form {
     margin-bottom: .5em;
 }
 
+#apr::placeholder {
+    text-align: right;
+}
+
+
+
 .submitBtn {
     padding: .5em;
     margin: 1em;
@@ -141,9 +147,14 @@ table {
         font-weight: bold;
         background-color: $lightyellow;
         color: $darkblue;
+        border-bottom: 3px solid $darkblue;
         
     }
     
+    tr {
+        border-bottom: 1px solid $medblue;
+    }
+           
 }
 
 footer {
@@ -161,23 +172,13 @@ footer {
     @media screen and (min-width: 780px) {
         .topSections {
             display: grid;
-            grid-template-columns: 45% 1fr; 
-            grid-template-areas:   "instructions enteredHead"
-                                   "form entered"
+            grid-template-columns: 50% 1fr; 
+            grid-template-areas:   "form entered"
                                    "calc calc"
-                                   "savings .";
+                                   "savings savings";
         }
 
-        .instructions {
-            grid-area: instructions;
-           
-        }
-
-        .enteredHead {
-            grid-area: enteredHead;
-        }
-
-        .formInput {
+        .form {
             grid-area: form;
             margin-right: .5em;
             

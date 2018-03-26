@@ -49,7 +49,7 @@
 
 /* CALCULATE THE MONTHLY PAYMENT AMOUNT -- using formula: A = P((r(1+r)^n)/((1+r)^n - 1)) */
 //variables
-    $a = '';
+    $a = 0;
     $p = $amountForm;
     $r = ($aprForm * .01)/ 12;
     $n = $months;
