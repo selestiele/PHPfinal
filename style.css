@@ -330,6 +330,9 @@ p {
   font-size: 1em;
   margin-bottom: 1.25em; }
 
+input[type="text"] {
+  width: 90%; }
+
 header {
   text-align: center;
   margin: 1em; }
@@ -341,7 +344,7 @@ header {
 
 form {
   border: 1px solid #1A243B;
-  text-align: justify;
+  text-align: left;
   background-color: #5C71A1;
   color: #f2f6ff;
   padding: 1em; }
@@ -349,14 +352,17 @@ form {
 .formLabel {
   padding: .5em;
   display: inline-block;
-  margin: .5em; }
+  /*margin: .5em;*/
+  color: #f2f6ff; }
 
-.formInput {
+.formInput, .formRadio {
   padding: .5em;
-  color: #1A243B; }
+  color: #1A243B;
+  max-width: 90%; }
 
-option {
-  padding: .5em; }
+.formRadio {
+  display: inline-block;
+  margin-bottom: .5em; }
 
 .submitBtn {
   padding: .5em;
@@ -365,14 +371,18 @@ option {
   background-color: #1A243B;
   color: #f2f6ff;
   border: 0;
-  box-shadow: none; }
+  box-shadow: none;
+  font-weight: 700;
+  letter-spacing: 1px; }
   .submitBtn:hover {
-    background-color: #584521; }
+    background-color: #F0CA7E;
+    color: #1A243B; }
 
 .errorMsg {
   color: red;
   font-weight: bold;
-  text-align: center; }
+  text-align: center;
+  padding: .5em; }
 
 .results {
   width: 90%;
@@ -420,7 +430,8 @@ footer {
   @media screen and (min-width: 780px) {
     .topSections {
       display: grid;
-      grid-template-areas: "instructions enteredHead" "form entered" "savings calc"; }
+      grid-template-columns: 45% 1fr;
+      grid-template-areas: "instructions enteredHead" "form entered" "calc calc" "savings ."; }
 
     .instructions {
       grid-area: instructions; }
@@ -428,9 +439,9 @@ footer {
     .enteredHead {
       grid-area: enteredHead; }
 
-    .formInput {
+    .formInput, .formRadio {
       grid-area: form;
-      margin-right: 1em; }
+      margin-right: .5em; }
 
     .entered {
       grid-area: entered;
@@ -444,6 +455,9 @@ footer {
     .savings {
       grid-area: savings;
       padding: 1em;
-      margin-left: .5em; } } }
+      margin-left: .5em; } }
+  @media screen and (min-width: 1200px) {
+    .topSections {
+      grid-template-columns: 35% 1fr; } } }
 
 /*# sourceMappingURL=style.css.map */

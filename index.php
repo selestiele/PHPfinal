@@ -1,87 +1,166 @@
-<?php include 'view/header.php'; ?>
+<?php
+
+//Things I need to do in this file:
 
 
-    <main>
-        <article class="topSections">
-            <section class="form">
-                <div class="instructions">
-                <p>Please enter your information in the form. Fields marked with an asterisk (*) are required.</p>
-                <p class="errorMsg"><!-- Add validation error messages here --></p></div>
-                <form action="controller.php" method="post" class="formInput">
-                    <label for="length" class="formLabel">Loan Length*<br>
-                        <select name="length" id="length">
-                            <option value="12">12 months</option>
-                            <option value="24">24 months</option>
-                            <option value="36">36 months</option>
-                            <option value="48">48 months</option>
-                            <option value="60">60 months</option>
-                            <option value="72">72 months</option>
-                        </select>
-                    </label>
-                    <label for="amount" class="formLabel">Loan Amount*<br>
-                        <input type="text" name="amount" id="amount" class="formInput"></label>
-                    
-                    <label for="apr" class="formLabel">Annual Interest Rate*<br>
-                        <input type="text" name="apr" id="apr" class="formInput" maxlength="5"> &percnt; </label>
-                    <label for="extra" class="formLabel">Extra Payment<br>
-                        <input type="text" name="extra" id="extra" class="formInput"></label><br>
-                    <input type="submit" value="Calculate!" class="submitBtn">
-                </form>
-            </section>
-<!-- Display the calculations-->
-            <section class="results">
-                <h3 class="enteredHead">You Entered:</h3>
-                <div class="entered">
-                        <p>Loan Amount: <!-- <?php echo htmlspecialchars($amount);  ?>--></p> 
-                        <p>Loan Length: <!--<?php echo htmlspecialchars($length);  ?>--></p>
-                        <p>Annual Interest Rate: <!--<?php echo htmlspecialchars($apr);  ?>--> &percnt;</p>
-                        <p>Extra Payments (optional):<!-- <?php echo htmlspecialchars($extra);  ?>--></p>
-                </div> <!-- end .entered -->
-                <div class="calc">
-                    <h3>Monthly Payment Amount</h3>
-                        <p>Testing<!-- calculated monthly payments, inc. extra payment --></p>
-                    <h3>Total Amount (principle + interest)</h3>
-                        <p>Testing<!-- Calculated total amount to be paid for loan --></p>
-                    <h3>Total Interest Paid</h3>
-                        <p>Testing<!-- Calculated total amount of interest to be paid --></p>
-                </div><!-- end .calc -->
-                <div class="savings">
-                    <p>so there's something here</p>
-                </div><!-- end .savings -->
-            </section> <!-- end .results -->
-        </article>
-        <section class="schedule">
-            <h3>Amortization Schedule</h3>
-                <table class="amort">
-                    <thead>
-                         <tr>
-                              <th>Payment</th>
-                              <th>Date</th>
-                              <th>Amount</th>
-                              <th>Principle</th>
-                              <th>Interest</th>
-                              <th>Extra Payment</th>
-                              <th>Balance</th>
-                         </tr>
-                    </thead>
-                    <tbody>
-                         <tr><!-- This is going to be a foreach loop -->
-                              <td>something</td>
-                              <td>to</td>
-                              <td>help</td>
-                              <td>with</td>
-                              <td>the</td>
-                              <td>format</td>
-                              <td>ting</td>
-                         </tr>
-                    </tbody>
-                </table>
-        </section><!-- end .schedule -->
-    </main>
-</body>
+// set variables, including empty strings, like errorMsg.
+
+$errorMsg = '';
+$submit = filter_input(INPUT_POST, 'submitBtn');
+
+
+//get amounts from form after submit
+$lengthForm = filter_input(INPUT_POST, 'length', FILTER_VALIDATE_INT);
+$amountForm = filter_input(INPUT_POST, 'amount', FILTER_VALIDATE_INT);
+$aprForm = filter_input(INPUT_POST, 'apr', FILTER_VALIDATE_FLOAT);
+$extraForm = filter_input(INPUT_POST, 'extra', FILTER_VALIDATE_INT);
+
+//validate information
+if (isset($submit)) {
+    if ( empty($lengthForm) || $lengthForm === 0 || $lengthForm === FALSE) {
+        $errorMsg = "Please enter a loan length in whole numbers only.";
+    } else if ( empty($amountForm) || $amountForm === 0 || $amountForm === FALSE) {
+        $errorMsg = "Please enter a loan amount in whole dollars, without any commas.";
+    } else if ( empty($aprForm) || $aprForm === 0 || $aprForm === FALSE) {
+        $errorMsg = "Please enter a percentage rate.";
+    } 
+} 
+
+//convert years to months IF years is checked
+$time = filter_input(INPUT_POST, 'time');
+$errorMsgTime = '';
+
+
+//check if months or years is checked and whether the length of time is an integer
+if (isset($submit) && $time == NULL) {
+    $errorMsg = "Please specify months or years for loan length.";
+}
+
+if ($time == 'years') {
+    $months = $lengthForm * 12;
+} else {
+    $months = $lengthForm;
+}
+
+
+/*              CALCULATE THE MONTHLY PAYMENT AMOUNT -- using formula: A = P((r(1+r)^n)/((1+r)^n - 1))            */
+//variables
+$a = '';
+$p = $amountForm;
+$r = ($aprForm * .01)/ 12;
+$n = $months;
+$extra = $extraForm;
+$total = '';
+$interest = '';
+  
+//Calculation - but only if the submit button is pressed
+if (isset($submit)) {
+    $baseExp = pow((1 + $r), $n);
+    $a = $p * (($r*$baseExp)/($baseExp - 1));
+    $a = round($a, 2);
+    $total = round(($a * $n), 2);
+    $interest = round($total - $p, 2);
+}
+
+/*           CREATE AMORTIZATION SCHEDULE           */
+
+//variables
+$payment = $a;
+$monthInt = 0;
+$totInt = 0;
+$balance = $p;
+$monthPrinciple = 0;
+$amountIntSaved = 0;
+$amountTimeSaved = 0;
+$now = new DateTime();
+$startMonth = $now -> modify('next month');
+
+//determine switch statement expression
+if ($extra <= 0 ) {
+    $payType = 'regular';
+} else {
+    $payType = 'extra';
+}
+
+//switch statement
+switch ($payType) {
+    case 'regular':
+        //total interest calculation if extra payments had not been made
+        for ($i = 1; $i <= $months; $i++) {
+            $monthInt = $balance * ($interest/12);
+            $monthPrinciple = $payment - $monthInt;
+            $balance -= $monthPrinciple;
+            $totInt += $monthInt;
+
+            if ($balance < 0) {
+                $monthPrinciple = $monthPrinciple + $balance;
+                $monthInt = $monthInt - $balance;
+                $balance = 0;
+            }
+        }
+        break;
+    case 'extra':
+        //echo "<table><th><td>Payment Number</td><td>Balance</td><td>Monthly Interest</td><td>Principle</td></th>";
+            for ($i = 1; $i <= $months; $i++) {
+                $monthInt = $balance * ($interest/12);
+                $monthPrinciple = $payment - $monthInt;
+                $balance -= ($monthPrinciple + $extra);
+                $totInt += $monthInt;
+    
+                if ($balance < 0) {
+                    $monthPrinciple = $monthPrinciple + $balance;
+                    $monthInt = $monthInt - $balance;
+                    $balance = 0;
+                    $amountTimeSaved = $months - $i;
+                    $amountIntSaved = round(($interest - $totInt), 2);
+                }
+    
+       
+                if ($i === 1) {
+                    $paymentDate = $startMonth;
+                } else {
+                    $paymentDate = $startMonth -> modify('+1 month');
+                }
+    
+           // echo "<tr><td>" . $i . "</td>";
+           // echo "<td>" . $paymentDate -> format('m-1-Y') . "</td>";
+           // echo "<td>" . round($balance, 2) . "</td>";
+           // echo "<td>" . round($monthInt, 2) . "</td>";
+           // echo "<td>" . round($monthPrinciple, 2) . "</td></tr>";
+    
+            if ($balance === 0) {
+                break;
+            }
+        } 
+       // echo "</table>";
+} 
+if (isset($submit)){
+    if ($payType == 'extra') {
+        $savings = "By making extra payments, you paid off your loan " . $amountTimeSaved . " months ahead of schedule.<br>
+        By making extra payments, you saved \$" . $amountIntSaved . " in interest.<br>";
+    }
+} else {
+    $savings = '';
+}
+
+     
+
+
+
+
+    
+
+
+include 'form.php';
 
 
 
 
 
-<?php include 'view/footer.php'; ?>
+// Make the savings section entirely PHP, so it shows only if there's extra payments?
+     //<h3>Savings</h3>
+     // <p>By making extra payments each month, you will cut your loan duration down to: <!-- Calculated time saved--></p>
+     // <p>By making extra payments each month, you will save: <!-- Calculated amount saved --></p>
+
+?>
+
