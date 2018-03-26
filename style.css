@@ -339,8 +339,9 @@ header {
 
 .topSections {
   margin: 0 auto;
-  width: 75%;
-  border-top: 1px solid #5C71A1; }
+  width: 85%;
+  border-top: 1px solid #5C71A1;
+  max-width: 1200px; }
 
 form {
   border: 1px solid #1A243B;
@@ -405,8 +406,9 @@ form {
     padding: 0; }
 
 .schedule {
-  width: 100%;
-  margin: 0 1em; }
+  width: 85%;
+  margin: 0 auto;
+  max-width: 1400px; }
 
 table {
   width: 90%;
