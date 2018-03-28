@@ -60,9 +60,11 @@
     if (isset($submit)) {
         $baseExp = pow((1 + $r), $n);
         $a = $p * (($r*$baseExp)/($baseExp - 1));
-        $a = round($a, 2);
-        $total = round(($a * $n), 2);
-        $totalInterest = round($total - $p, 2);
+        //$a = round($a, 2);
+        //$total = round(($a * $n), 2);
+        $total = $a * $n;
+        //$totalInterest = round($total - $p, 2);
+        $totalInterest = $total - $p;
     }
 
 /*           CREATE AMORTIZATION SCHEDULE           */
@@ -86,7 +88,7 @@
         $payType = 'extra';
     }
 
-// table calculations
+// table calculations -- moved to form.php
 //    for ($i = 1; $i <= $months; $i++) {
 //        $monthInt = $balance * $r);
 //        $monthPrinciple = $payment - $monthInt;
@@ -118,17 +120,4 @@
 //        } //endif
 //    } // end for statement 
 
-// get information for Savings section of page
-    if (isset($submit)){
-        if ($payType == 'extra') {
-            $savings = "By making extra payments, you will pay off your loan " . $amountTimeSaved . " months ahead of schedule.<br> By making extra payments, you will save \$" . $amountIntSaved . " in interest.<br>";
-        } else {
-            $savings = '';
-        }
-    } else {
-            $savings = '';
-    }
-
-    include 'form.php';
-
-?>
+include 'form.php'; ?>

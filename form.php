@@ -37,13 +37,10 @@
                     <h3>Monthly Payment Amount</h3>
                         <p><?php echo "$" . number_format($a, 2);  ?></p>
                     <h3>Total Amount (principle + interest)</h3>
-                        <p><?php echo "$" . number_format($total);  ?></p>
+                        <p><?php echo "$" . number_format($total, 2);  ?></p>
                     <h3>Total Interest Paid</h3>
-                        <p><?php echo "$" . number_format($totalInterest);  ?></p>
+                        <p><?php echo "$" . number_format($totalInterest, 2);  ?></p>
                 </div><!-- end .calc -->
-                <div class="savings">
-                    <p><?php echo $savings; ?>  </p>
-                </div><!-- end .savings -->
             </section> <!-- end .results -->
         </article>
         <section class="schedule">
@@ -68,22 +65,19 @@
                             $balance -= ($monthPrinciple + $extra);
                             $accruedInt += $monthInt;
 
-//                            if ($balance < 0) {
-//                                $payment = round($balance, 2);
-//                                $monthInt = $balance * $r;
-//                                $monthPrinciple = $balance - $monthInt - $extra;
-//                                //$balance = 0;
-//                                //$amountTimeSaved = $months - $i;
-//                                //$amountIntSaved = round(($totalInterest - $accruedInt), 2);
-//                            }
+//                            
                             if ($balance < 0) {
                                 $monthPrinciple += $balance;
-                                $payment = round($monthPrinciple + $extra, 2);
-                                $monthInt = round($payment * $r, 2);
-                                $monthPrinciple = round($payment - $monthInt, 2);
+                                //$payment = round($monthPrinciple + $extra, 2);
+                                $paymet = $monthPrinciple + $extra;
+                                //$monthInt = round($payment * $r, 2);
+                                $monthInt = $payment * $r;
+                                //$monthPrinciple = round($payment - $monthInt, 2);
+                                $monthPrinciple = $payment - $monthInt;
                                 $balance = 0;
                                 $amountTimeSaved = $months - $i;
-                                $amountIntSaved = round(($totalInterest - $accruedInt), 2);
+                                //$amountIntSaved = round(($totalInterest - $accruedInt), 2);
+                                $amountIntSaved = $totalInterest - $accruedInt;
                             }
                             
                             if ($i === 1) {
@@ -94,7 +88,7 @@
                             <tr>
                               <td><?php echo $i; ?></td>
                               <td><?php echo $paymentDate -> format('m-1-Y'); ?></td>
-                              <td><?php echo "$" . $payment; ?></td>
+                              <td><?php echo "$" . number_format($payment, 2); ?></td>
                               <td><?php echo "$" . $extra; ?></td>
                               <td><?php echo "$" . number_format($monthPrinciple, 2); ?></td>
                               <td><?php echo "$" . number_format($monthInt, 2); ?></td>
@@ -108,12 +102,23 @@
                          
                     </tbody>
                 </table>
+            <div class="savings">
+                <?php 
+        // get information for Savings section of page
+                if (isset($submit)){
+                    if ($payType == 'extra') {
+                        $savings = "By making extra payments, you will pay off your loan " . $amountTimeSaved . " months ahead of schedule.<br> By making extra payments, you will save \$" . number_format($amountIntSaved, 2) . " in interest.<br>";
+                    } else {
+                        $savings = '';
+                    }
+                } else {
+                        $savings = '';
+                } ?>
+    
+                
+                <p><?php echo $savings; ?>  </p>
+                </div><!-- end .savings -->
         </section><!-- end .schedule -->
     </main>
 </body>
-
-
-
-
-
 <?php include 'view/footer.php'; ?>
